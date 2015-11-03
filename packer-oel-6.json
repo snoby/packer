@@ -1,6 +1,7 @@
 {
   "_comment": "Change this script to allow the URL to the ISO to be passed in",
   "_comment": "The ssh terminal will sit and wait until the install has completed so probably want to change the timeout to longer",
+  "_comment": "the provisioners section can be setup to run on only the build names you specify",
   "builders":
   [
     {
@@ -29,6 +30,35 @@
         [ "modifyvm", "{{.Name}}", "--memory", "4096"],
         [ "modifyvm", "{{.Name}}", "--cpus", "1"]
       ]
+    },
+    {
+      "name": "oel-6-vmware",
+      "type": "vmware-iso",
+      "boot_command":
+      [
+        "<tab> text ks=http://{{ .HTTPIP}}:{{ .HTTPPort }}/oracleDBtest.cfg<enter><wait>"
+      ],
+      "boot_wait": "10s",
+      "disk_size": "20000",
+      "disk_type_id": "0",
+      "guest_os_type": "oraclelinux-64",
+      "http_directory": "http",
+      "iso_checksum": "5738f10a506d3630edfd297ef179b553091c6a48",
+      "iso_checksum_type": "sha1",
+      "iso_url": "iso/Oracle_EL_6_6.iso",
+      "output_directory": "img_oel_6_vmware",
+      "ssh_pty": "true",
+      "ssh_username": "oracle",
+      "ssh_password": "oracle",
+      "ssh_wait_timeout": "60m",
+      "shutdown_command": "echo '/sbin/halt -h -p' > shutdown.sh; echo 'oracle'|sudo -S sh 'shutdown.sh'",
+      "vmx_data":
+      {
+        "memsize": "4096",
+        "numvcpus": "1",
+        "cpuid.coresPerSocket": "1"
+      }
+
     }
   ],
   "provisioners":
