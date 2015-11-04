@@ -9,10 +9,12 @@
       "type": "virtualbox-iso",
       "boot_command":
       [
-        "<tab> text ks=http://{{ .HTTPIP}}:{{ .HTTPPort }}/oracleDBtest.cfg<enter><wait>"
+        "<tab> text ks=http://{{ .HTTPIP}}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
       ],
+      "format": "ova",
       "boot_wait": "10s",
       "disk_size": "20000",
+      "hard_drive_interface": "scsi",
       "guest_os_type": "RedHat_64",
       "http_directory": "http",
       "iso_checksum": "5738f10a506d3630edfd297ef179b553091c6a48",
@@ -29,6 +31,10 @@
       [
         [ "modifyvm", "{{.Name}}", "--memory", "4096"],
         [ "modifyvm", "{{.Name}}", "--cpus", "1"]
+      ],
+      "export_opts": 
+      [
+        "--manifest", "--options", "nomacs", "--vsys", "0" 
       ]
     },
     {
@@ -36,7 +42,7 @@
       "type": "vmware-iso",
       "boot_command":
       [
-        "<tab> text ks=http://{{ .HTTPIP}}:{{ .HTTPPort }}/oracleDBtest.cfg<enter><wait>"
+        "<tab> text ks=http://{{ .HTTPIP}}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
       ],
       "boot_wait": "10s",
       "disk_size": "20000",
@@ -68,7 +74,9 @@
       "execute_command": "sudo sh {{.Path}}",
       "scripts":
         [
-          "scripts/oracle_user.sh"
+          "scripts/oracle_user.sh",
+          "scripts/cleanup.sh",
+          "scripts/zerodisk.sh"
         ]
     }
   ]
